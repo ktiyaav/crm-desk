@@ -2,25 +2,28 @@ const express = require('express');
 const { ApolloServer } = require('apollo-server-express');
 const { typeDefs } = require('./schema');
 const { resolvers } = require('./resolvers');
+const pool = require('./db');
 
 const app = express();
 const port = 4000;
 
-const server = new ApolloServer({ typeDefs, resolvers });
+const server = new ApolloServer({
+  typeDefs,
+  resolvers,
+  context: () => ({ db: pool }),
+});
 
 async function startServer() {
-  // Start the Apollo Server
-  await server.start();
+  try {
+    await server.start();
+    server.applyMiddleware({ app });
 
-  // Apply the Apollo GraphQL middleware to the Express app
-  server.applyMiddleware({ app });
-
-  // Start the Express server
-  app.listen({ port }, () =>
-    console.log(`Server ready at http://localhost:${port}${server.graphqlPath}`)
-  );
+    app.listen({ port }, () =>
+      console.log(`Server ready at http://localhost:${port}${server.graphqlPath}`)
+    );
+  } catch (err) {
+    console.error('Error starting server:', err);
+  }
 }
 
-startServer().catch(err => {
-  console.error('Error starting server:', err);
-});
+startServer();
