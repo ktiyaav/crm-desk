@@ -2,7 +2,7 @@ const express = require('express');
 const { ApolloServer } = require('apollo-server-express');
 const { typeDefs } = require('./schema');
 const { resolvers } = require('./resolvers');
-const pool = require('./db');
+const sequelize = require('./db');
 
 const app = express();
 const port = 4000;
@@ -10,7 +10,7 @@ const port = 4000;
 const server = new ApolloServer({
   typeDefs,
   resolvers,
-  context: () => ({ db: pool }),
+  context: () => ({ db: sequelize }),
 });
 
 async function startServer() {
