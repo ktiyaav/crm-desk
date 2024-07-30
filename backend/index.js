@@ -6,9 +6,9 @@ const { sequelize } = require('./src/models');
 // const authenticate = require('./src/middlewares/authMiddleware');
 // const roleMiddleware = require('./src/middlewares/roleMiddleware');
 // const authController = require('./src/controllers/authController');
-sequelize.sync({ alter: true }) // Use with caution in production
-  .then(() => console.log('Database synced'))
-  .catch(err => console.error('Error syncing database:', err));
+// sequelize.sync({ alter: true }) // Use with caution in production
+//   .then(() => console.log('Database synced'))
+//   .catch(err => console.error('Error syncing database:', err));
   
 const app = express();
 const port = 4000;
