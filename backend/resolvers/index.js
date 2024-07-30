@@ -1,4 +1,4 @@
-const { resolvers: tenantResolvers } = require('./tenantResolvers');
+const { resolvers: tenantResolvers } = require('./tenantResolver');
 // Import other resolvers as needed
 
 const resolvers = {
