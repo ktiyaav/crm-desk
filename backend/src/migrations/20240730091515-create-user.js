@@ -9,14 +9,32 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      firstName: {
+      tenant_id: {
+        type: Sequelize.INTEGER
+      },
+      client_id: {
+        type: Sequelize.INTEGER
+      },
+      username: {
         type: Sequelize.STRING
       },
-      lastName: {
+      password: {
         type: Sequelize.STRING
       },
       email: {
         type: Sequelize.STRING
+      },
+      first_name: {
+        type: Sequelize.STRING
+      },
+      last_name: {
+        type: Sequelize.STRING
+      },
+      phone_number: {
+        type: Sequelize.STRING
+      },
+      role: {
+        type: Sequelize.ENUM
       },
       createdAt: {
         allowNull: false,
