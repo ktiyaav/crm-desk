@@ -2,7 +2,8 @@ const express = require('express');
 const { ApolloServer } = require('apollo-server-express');
 const { typeDefs } = require('./schema');
 const { resolvers } = require('./resolvers');
-const sequelize = require('./db');
+// const sequelize = require('./db');
+const { sequelize } = require('./models');
 
 const app = express();
 const port = 4000;
