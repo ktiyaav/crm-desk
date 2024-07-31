@@ -1,30 +1,44 @@
 const express = require('express');
-const { ApolloServer } = require('apollo-server-express');
+const { ApolloServer, AuthenticationError } = require('apollo-server-express');
 const { typeDefs } = require('./src/graphql/schema');
 const { resolvers } = require('./src/graphql/resolvers');
 const { sequelize } = require('./src/models');
-// const authenticate = require('./src/middlewares/authMiddleware');
-// const roleMiddleware = require('./src/middlewares/roleMiddleware');
-// const authController = require('./src/controllers/authController');
-// sequelize.sync({ alter: true }) // Use with caution in production
-//   .then(() => console.log('Database synced'))
-//   .catch(err => console.error('Error syncing database:', err));
+const { verifyToken } = require('./src/utils/authUtils')
+require('dotenv').config();
+
+const context = ({ req }) => {
+  const { query } = req.body;
   
+  // regex to identify if query is for login or register
+  const regex = new RegExp("^mutation[ ]{0,1}{[ ]{0,1}(login|register).*$");
+  const isAuthBypassMutation = query && regex.test(query);
+  if (isAuthBypassMutation) {
+    return { db: sequelize }; // Bypass authentication for login and register mutations
+  }
+
+  const authHeader = req.headers.authorization || '';
+  const token = authHeader.replace('Bearer ', '');
+
+  if (!token) {
+    throw new AuthenticationError('Authentication token missing');
+  }
+
+  try {
+    // const decoded = verifyToken(token);
+    // return { userId: decoded.user_id, db: sequelize };
+    return { db: sequelize };
+  } catch (error) {
+    throw new AuthenticationError('Invalid or expired token');
+  }
+};
+
 const app = express();
 const port = 4000;
-
-// Middleware to handle JSON requests
-// app.use(express.json());
-
-// Public route for login
-// app.post('/login', authController.login);
-// app.use(authenticate);
-// app.use(roleMiddleware(['admin', 'user'])); // Example usage for a route that requires admin or user role
 
 const server = new ApolloServer({
   typeDefs,
   resolvers,
-  context: () => ({ db: sequelize }),
+  context,
 });
 
 async function startServer() {
