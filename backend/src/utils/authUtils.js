@@ -4,7 +4,7 @@ const bcrypt = require("bcrypt");
 const saltRounds = 10;
 
 const generateToken = (user) => {
-  return jwt.sign({ userId: user.user_id }, process.env.JWT_SECRET ?? 'secretkey', {
+  return jwt.sign({ userId: user.user_id, role: user.role}, process.env.JWT_SECRET ?? 'secretkey', {
     expiresIn: "1h",
   });
 };

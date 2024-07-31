@@ -1,8 +1,10 @@
+const { AuthenticationError } = require('apollo-server-express');
 const { Tenant } = require('../../models')
 
 const resolvers = {
   Query: {
-    tenants: async () => {
+    tenants: async (root,args,context) => {
+      if(context.user_role !== 'admin') throw new AuthenticationError('Insufficient Permission for this!');
       try {
         return await Tenant.findAll();
       } catch (error) {
