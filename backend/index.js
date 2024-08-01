@@ -1,5 +1,5 @@
 const express = require('express');
-const { ApolloServer, AuthenticationError } = require('apollo-server-express');
+const { ApolloServer } = require('apollo-server-express');
 const { typeDefs } = require('./src/graphql/schema');
 const { resolvers } = require('./src/graphql/resolvers');
 const { authMiddleware } = require('./src/middleware/authMiddleware.js');
